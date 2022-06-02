@@ -3,6 +3,10 @@ package pl.krzychuuweb.debtmanagment.debtor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import pl.krzychuuweb.debtmanagment.exception.NotFoundException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,6 +26,19 @@ class DebtorQueryFacadeTest {
     }
 
     @Test
+    void should_get_all_debtors() {
+        List<Debtor> debtorList = new ArrayList<>();
+        debtorList.add(TestDebtorBuilder.newDebtor().build());
+        debtorList.add(TestDebtorBuilder.newDebtor().but().withId(2L).withFirstName("AnyFirstName").build());
+
+        when(debtorQueryRepository.findAll()).thenReturn(debtorList);
+
+        List<Debtor> result = debtorQueryFacade.getAllDebtors();
+
+        assertThat(result).hasSize(2);
+    }
+
+    @Test
     void should_get_debtor_by_id() {
         Debtor debtor = TestDebtorBuilder.newDebtor().build();
         when(debtorQueryRepository.getById(anyLong())).thenReturn(debtor);
@@ -36,7 +53,7 @@ class DebtorQueryFacadeTest {
     void should_get_debtor_by_id_return_exception() {
         when(debtorQueryRepository.getById(anyLong())).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> debtorQueryFacade.getDebtorById(anyLong()));
+        assertThrows(NotFoundException.class, () -> debtorQueryFacade.getDebtorById(anyLong()));
     }
 
     @Test

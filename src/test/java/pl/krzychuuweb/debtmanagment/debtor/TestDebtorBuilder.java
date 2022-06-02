@@ -5,7 +5,7 @@ class TestDebtorBuilder {
     public static String DEFAULT_FIRSTNAME = "ExampleFirstName";
 
     private Long id = 1L;
-    private String firstName = DEFAULT_FIRSTNAME;
+    private String firstName = "ExampleFirstName";
     private String lastName = "ExampleLastName";
     private boolean isEnabled = true;
 

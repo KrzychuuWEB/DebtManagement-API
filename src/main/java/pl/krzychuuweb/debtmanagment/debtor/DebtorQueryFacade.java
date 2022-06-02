@@ -1,7 +1,9 @@
 package pl.krzychuuweb.debtmanagment.debtor;
 
 import org.springframework.stereotype.Service;
+import pl.krzychuuweb.debtmanagment.exception.NotFoundException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,9 +15,13 @@ public class DebtorQueryFacade {
         this.debtorQueryRepository = debtorQueryRepository;
     }
 
+    public List<Debtor> getAllDebtors() {
+        return debtorQueryRepository.findAll();
+    }
+
     public Debtor getDebtorById(Long id) {
         return Optional.ofNullable(debtorQueryRepository.getById(id)).orElseThrow(
-                () -> new IllegalArgumentException("Debtor with id "+ id +" not found!")
+                () -> new NotFoundException("Debtor with id "+ id +" not found!")
         );
     }
 
