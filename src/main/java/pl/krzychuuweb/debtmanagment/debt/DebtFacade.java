@@ -29,6 +29,18 @@ public class DebtFacade {
         return debtEdited;
     }
 
+    @Transactional
+    public Debt editDebt(Debt debt) {
+        Debt debtToEdit = debtQueryFacade.getDebtById(debt.getId());
+        debtToEdit.setName(debt.getName());
+        debtToEdit.setDescription(debt.getDescription());
+        debtToEdit.setPrice(debt.getPrice());
+
+        debtRepository.save(debtToEdit);
+
+        return debtToEdit;
+    }
+
     public void deleteDebt(Long id) {
         debtRepository.deleteDebtById(id);
     }

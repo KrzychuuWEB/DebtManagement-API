@@ -46,6 +46,19 @@ class DebtFacadeTest {
     }
 
     @Test
+    void should_edit_debt() {
+        Debt debt = TestDebtBuilder.newDebt().build();
+        Debt debtToEdit = TestDebtBuilder.newDebt().but().withId(debt.getId()).withName("EditName").withDescription("EditDescription").build();
+        when(debtQueryFacade.getDebtById(anyLong())).thenReturn(debt);
+
+        Debt result = debtFacade.editDebt(debtToEdit);
+
+        assertThat(result.getId()).isEqualTo(debtToEdit.getId());
+        assertThat(result.getName()).isEqualTo(debtToEdit.getName());
+        assertThat(result.getDescription()).isEqualTo(debtToEdit.getDescription());
+    }
+
+    @Test
     void should_delete_debt_by_id() {
         debtFacade.deleteDebt(anyLong());
         verify(debtRepository, times(1)).deleteDebtById(anyLong());

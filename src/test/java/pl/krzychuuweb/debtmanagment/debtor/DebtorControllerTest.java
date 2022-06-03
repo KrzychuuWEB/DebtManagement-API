@@ -1,5 +1,6 @@
 package pl.krzychuuweb.debtmanagment.debtor;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import pl.krzychuuweb.debtmanagment.debtor.dto.DebtorCreateDTO;
 import pl.krzychuuweb.debtmanagment.debtor.dto.DebtorDTO;
+import pl.krzychuuweb.debtmanagment.exception.BadRequestException;
 import pl.krzychuuweb.debtmanagment.exception.NotFoundException;
 
 import javax.transaction.Transactional;
@@ -110,6 +112,19 @@ class DebtorControllerTest {
         assertThat(response.id()).isEqualTo(debtorDTO.id());
         assertThat(response.firstName()).isEqualTo(debtorDTO.firstName());
         assertThat(response.lastName()).isEqualTo(debtorDTO.lastName());
+    }
+
+    @Test
+    void should_expect_exception_in_edit_debtor() throws Exception {
+        Debtor debtor = TestDebtorBuilder.newDebtor().but().withId(1L).build();
+
+        mockMvc.perform(put("/debtors/" + (debtor.getId() + 1L))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                objectMapper.writeValueAsString(debtor)
+                        ))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadRequestException))
+                .andReturn();
     }
 
     @Test
