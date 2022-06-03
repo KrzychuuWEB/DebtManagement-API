@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,7 +29,7 @@ class DebtQueryFacadeTest {
     @Test
     void should_get_debt_by_id() {
         Debt debt = TestDebtBuilder.newDebt().build();
-        when(debtQueryRepository.getById(anyLong())).thenReturn(debt);
+        when(debtQueryRepository.findById(anyLong())).thenReturn(Optional.of(debt));
 
         Debt result = debtQueryFacade.getDebtById(anyLong());
 
@@ -38,7 +39,7 @@ class DebtQueryFacadeTest {
 
     @Test
     void should_get_debt_by_id_expect_exception() {
-        when(debtQueryRepository.getById(anyLong())).thenReturn(null);
+        when(debtQueryRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(IllegalArgumentException.class, () -> debtQueryFacade.getDebtById(anyLong()));
     }

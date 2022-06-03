@@ -15,7 +15,7 @@ public class DebtQueryFacade {
     }
 
     public Debt getDebtById(Long id) {
-        return Optional.ofNullable(debtQueryRepository.getById(id)).orElseThrow(
+        return debtQueryRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("Debt with id "+ id +" is not exists")
         );
     }
