@@ -7,6 +7,7 @@ import pl.krzychuuweb.debtmanagment.exception.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -41,7 +42,7 @@ class DebtorQueryFacadeTest {
     @Test
     void should_get_debtor_by_id() {
         Debtor debtor = TestDebtorBuilder.newDebtor().build();
-        when(debtorQueryRepository.getById(anyLong())).thenReturn(debtor);
+        when(debtorQueryRepository.findById(anyLong())).thenReturn(Optional.of(debtor));
 
         Debtor result = debtorQueryFacade.getDebtorById(anyLong());
 
@@ -51,7 +52,7 @@ class DebtorQueryFacadeTest {
 
     @Test
     void should_get_debtor_by_id_return_exception() {
-        when(debtorQueryRepository.getById(anyLong())).thenReturn(null);
+        when(debtorQueryRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> debtorQueryFacade.getDebtorById(anyLong()));
     }
@@ -59,7 +60,7 @@ class DebtorQueryFacadeTest {
     @Test
     void should_get_debtor_is_enabled_is_true() {
         Debtor debtor = TestDebtorBuilder.newDebtor().build();
-        when(debtorQueryRepository.getById(anyLong())).thenReturn(debtor);
+        when(debtorQueryRepository.findById(anyLong())).thenReturn(Optional.of(debtor));
 
         boolean result = debtorQueryFacade.checkIfDebtorIsEnabled(anyLong());
 
@@ -69,7 +70,7 @@ class DebtorQueryFacadeTest {
     @Test
     void should_get_debtor_is_enabled_is_false_and_expect_exception() {
         Debtor debtor = TestDebtorBuilder.newDebtor().but().withIsEnabled(false).build();
-        when(debtorQueryRepository.getById(anyLong())).thenReturn(debtor);
+        when(debtorQueryRepository.findById(anyLong())).thenReturn(Optional.of(debtor));
 
         assertThrows(IllegalArgumentException.class, () -> debtorQueryFacade.checkIfDebtorIsEnabled(anyLong()));
     }

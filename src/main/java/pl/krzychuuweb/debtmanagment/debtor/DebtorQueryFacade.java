@@ -20,7 +20,7 @@ public class DebtorQueryFacade {
     }
 
     public Debtor getDebtorById(Long id) {
-        return Optional.ofNullable(debtorQueryRepository.getById(id)).orElseThrow(
+        return debtorQueryRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Debtor with id "+ id +" not found!")
         );
     }
