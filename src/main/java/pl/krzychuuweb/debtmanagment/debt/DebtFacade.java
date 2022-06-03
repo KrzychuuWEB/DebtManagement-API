@@ -1,6 +1,7 @@
 package pl.krzychuuweb.debtmanagment.debt;
 
 import org.springframework.stereotype.Service;
+import pl.krzychuuweb.debtmanagment.debtor.DebtorQueryFacade;
 
 import javax.transaction.Transactional;
 
@@ -9,24 +10,28 @@ public class DebtFacade {
 
     private final DebtRepository debtRepository;
     private final DebtQueryFacade debtQueryFacade;
+    private final DebtorQueryFacade debtorQueryFacade;
 
-    public DebtFacade(final DebtRepository debtRepository, final DebtQueryFacade debtQueryFacade) {
+    public DebtFacade(final DebtRepository debtRepository, final DebtQueryFacade debtQueryFacade, final DebtorQueryFacade debtorQueryFacade) {
         this.debtRepository = debtRepository;
         this.debtQueryFacade = debtQueryFacade;
+        this.debtorQueryFacade = debtorQueryFacade;
     }
 
-    public Debt addDebt(Debt debt) {
+    public Debt addDebt(Debt debt, Long debtorId) {
+        debt.setDebtor(debtorQueryFacade.getDebtorById(debtorId));
+
         return debtRepository.save(debt);
     }
 
     @Transactional
-    public Debt payBackTheDebt(Debt debt) {
-        Debt debtEdited = debtQueryFacade.getDebtById(debt.getId());
-        debtEdited.setDevoted(true);
+    public Debt changeDevoted(Long id, Debt debt) {
+        Debt debtToChangeDevoted = debtQueryFacade.getDebtById(id);
+        debtToChangeDevoted.setDevoted(debt.isDevoted());
 
-        debtRepository.save(debtEdited);
+        debtRepository.save(debtToChangeDevoted);
 
-        return debtEdited;
+        return debtToChangeDevoted;
     }
 
     @Transactional
@@ -36,9 +41,7 @@ public class DebtFacade {
         debtToEdit.setDescription(debt.getDescription());
         debtToEdit.setPrice(debt.getPrice());
 
-        debtRepository.save(debtToEdit);
-
-        return debtToEdit;
+        return debtRepository.save(debtToEdit);
     }
 
     public void deleteDebt(Long id) {

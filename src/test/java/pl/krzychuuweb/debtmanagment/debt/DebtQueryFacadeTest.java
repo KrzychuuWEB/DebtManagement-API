@@ -3,6 +3,7 @@ package pl.krzychuuweb.debtmanagment.debt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import pl.krzychuuweb.debtmanagment.exception.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ class DebtQueryFacadeTest {
     void should_get_debt_by_id_expect_exception() {
         when(debtQueryRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> debtQueryFacade.getDebtById(anyLong()));
+        assertThrows(NotFoundException.class, () -> debtQueryFacade.getDebtById(anyLong()));
     }
 
     @Test

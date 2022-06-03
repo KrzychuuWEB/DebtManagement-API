@@ -47,7 +47,7 @@ class DebtorController {
 
     @PutMapping("/{id}")
     DebtorDTO editDebtor(@PathVariable Long id, @RequestBody DebtorDTO debtorDTO) {
-        if(!id.equals(debtorDTO.id())) {
+        if (!id.equals(debtorDTO.id())) {
             throw new BadRequestException("Id in path is not equals in body");
         }
 

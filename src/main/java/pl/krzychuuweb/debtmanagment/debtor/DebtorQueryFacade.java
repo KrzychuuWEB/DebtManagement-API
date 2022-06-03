@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import pl.krzychuuweb.debtmanagment.exception.NotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DebtorQueryFacade {
@@ -21,7 +20,7 @@ public class DebtorQueryFacade {
 
     public Debtor getDebtorById(Long id) {
         return debtorQueryRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Debtor with id "+ id +" not found!")
+                () -> new NotFoundException("Debtor with id " + id + " not found!")
         );
     }
 

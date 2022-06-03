@@ -1,23 +1,76 @@
 package pl.krzychuuweb.debtmanagment.debt;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import pl.krzychuuweb.debtmanagment.debt.dto.DebtCreateDTO;
+import pl.krzychuuweb.debtmanagment.debt.dto.DebtDTO;
+import pl.krzychuuweb.debtmanagment.debt.dto.DebtDevotedDTO;
+import pl.krzychuuweb.debtmanagment.debt.dto.DebtEditDTO;
+import pl.krzychuuweb.debtmanagment.exception.BadRequestException;
 
 import java.util.List;
+
+import static pl.krzychuuweb.debtmanagment.debt.dto.DebtDTO.mapDebtListToDebtDTOList;
+import static pl.krzychuuweb.debtmanagment.debt.dto.DebtDTO.mapDebtToDebtDTO;
+import static pl.krzychuuweb.debtmanagment.debt.dto.DebtMapper.*;
 
 @RestController
 @RequestMapping("/debts")
 class DebtController {
 
     private final DebtQueryFacade debtQueryFacade;
+    private final DebtFacade debtFacade;
 
-    DebtController(final DebtQueryFacade debtQueryFacade) {
+    DebtController(final DebtQueryFacade debtQueryFacade, final DebtFacade debtFacade) {
         this.debtQueryFacade = debtQueryFacade;
+        this.debtFacade = debtFacade;
     }
 
     @GetMapping
-    List<Debt> getAllDebts() {
-        return debtQueryFacade.getAllDebts();
+    List<DebtDTO> getAllDebts() {
+        return mapDebtListToDebtDTOList(debtQueryFacade.getAllDebts());
+    }
+
+    @GetMapping("/{id}")
+    DebtDTO getDebtById(@PathVariable Long id) {
+        return mapDebtToDebtDTO(debtQueryFacade.getDebtById(id));
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    DebtDTO createDebt(@RequestBody DebtCreateDTO debtCreateDTO) {
+        return mapDebtToDebtDTO(
+                debtFacade.addDebt(mapDebtCreateDTOToDebt(debtCreateDTO), debtCreateDTO.debtorId())
+        );
+    }
+
+    @PutMapping("/{id}")
+    DebtDTO editDebt(@PathVariable Long id, @RequestBody DebtEditDTO debtEditDTO) {
+        if (!id.equals(debtEditDTO.id())) {
+            throw new BadRequestException("Id in path is not equals in body");
+        }
+
+        return mapDebtToDebtDTO(
+                debtFacade.editDebt(
+                        mapDebtEditDTOToDebt(debtEditDTO)
+                )
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    void deleteDebt(@PathVariable Long id) {
+        debtFacade.deleteDebt(id);
+    }
+
+    @PutMapping("/{id}/devoted")
+    DebtDevotedDTO changeDebtDevoted(@PathVariable Long id, @RequestBody DebtDevotedDTO debtDevotedDTO) {
+        if (!id.equals(debtDevotedDTO.id())) {
+            throw new BadRequestException("Id in path is not equals in body");
+        }
+
+        return DebtDevotedDTO.mapDebtToDebtDevotedDTO(debtFacade.changeDevoted(
+                id,
+                mapDebtDevotedDTOToDebt(debtDevotedDTO)
+        ));
     }
 }

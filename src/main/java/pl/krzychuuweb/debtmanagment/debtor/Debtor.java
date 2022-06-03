@@ -1,9 +1,6 @@
 package pl.krzychuuweb.debtmanagment.debtor;
 
-import pl.krzychuuweb.debtmanagment.debt.Debt;
-
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "debtors")
