@@ -17,6 +17,7 @@ import pl.krzychuuweb.debtmanagment.exception.BadRequestException;
 import pl.krzychuuweb.debtmanagment.exception.NotFoundException;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,7 +91,7 @@ class DebtorControllerTest {
 
         assertThat(response.firstName()).isEqualTo(debtorCreateDTO.firstName());
         assertThat(response.lastName()).isEqualTo(debtorCreateDTO.lastName());
-        assertThat(response.createdAt()).isNotNull();
+        assertThat(response.createdAt()).isBefore(LocalDateTime.now());
     }
 
     @Test
