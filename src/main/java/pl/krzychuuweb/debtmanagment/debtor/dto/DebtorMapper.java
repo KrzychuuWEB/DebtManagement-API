@@ -11,11 +11,11 @@ public class DebtorMapper {
         return debtor;
     }
 
-    public static Debtor mapDebtorDTOToDebtor(DebtorDTO debtorDTO) {
+    public static Debtor mapDebtorEditDTOToDebtor(DebtorEditDTO debtorEditDTO) {
         Debtor debtor = new Debtor();
-        debtor.setId(debtorDTO.id());
-        debtor.setFirstName(debtorDTO.firstName());
-        debtor.setLastName(debtorDTO.lastName());
+        debtor.setId(debtorEditDTO.id());
+        debtor.setFirstName(debtorEditDTO.firstName());
+        debtor.setLastName(debtorEditDTO.lastName());
         return debtor;
     }
 }

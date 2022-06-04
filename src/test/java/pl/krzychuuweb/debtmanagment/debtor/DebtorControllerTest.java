@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import pl.krzychuuweb.debtmanagment.debtor.dto.DebtorCreateDTO;
 import pl.krzychuuweb.debtmanagment.debtor.dto.DebtorDTO;
+import pl.krzychuuweb.debtmanagment.debtor.dto.DebtorEditDTO;
 import pl.krzychuuweb.debtmanagment.exception.BadRequestException;
 import pl.krzychuuweb.debtmanagment.exception.NotFoundException;
 
@@ -89,27 +90,28 @@ class DebtorControllerTest {
 
         assertThat(response.firstName()).isEqualTo(debtorCreateDTO.firstName());
         assertThat(response.lastName()).isEqualTo(debtorCreateDTO.lastName());
+        assertThat(response.createdAt()).isNotNull();
     }
 
     @Test
     @Transactional
     void should_edit_debtor() throws Exception {
         Debtor savedDebtor = debtorRepository.save(TestDebtorBuilder.newDebtor().build());
-        DebtorDTO debtorDTO = new DebtorDTO(savedDebtor.getId(), "EditExampleFirstName", "EditDebtorExampleLastName");
+        DebtorEditDTO debtorEditDTO = new DebtorEditDTO(savedDebtor.getId(), "EditExampleFirstName", "EditDebtorExampleLastName");
 
-        MvcResult mvcResult = mockMvc.perform(put("/debtors/" + debtorDTO.id())
+        MvcResult mvcResult = mockMvc.perform(put("/debtors/" + debtorEditDTO.id())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(
-                                objectMapper.writeValueAsString(debtorDTO)
+                                objectMapper.writeValueAsString(debtorEditDTO)
                         ))
                 .andExpect(status().is(200))
                 .andReturn();
 
         DebtorDTO response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), DebtorDTO.class);
 
-        assertThat(response.id()).isEqualTo(debtorDTO.id());
-        assertThat(response.firstName()).isEqualTo(debtorDTO.firstName());
-        assertThat(response.lastName()).isEqualTo(debtorDTO.lastName());
+        assertThat(response.id()).isEqualTo(debtorEditDTO.id());
+        assertThat(response.firstName()).isEqualTo(debtorEditDTO.firstName());
+        assertThat(response.lastName()).isEqualTo(debtorEditDTO.lastName());
     }
 
     @Test

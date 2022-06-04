@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.krzychuuweb.debtmanagment.debtor.dto.DebtorCreateDTO;
 import pl.krzychuuweb.debtmanagment.debtor.dto.DebtorDTO;
+import pl.krzychuuweb.debtmanagment.debtor.dto.DebtorEditDTO;
 import pl.krzychuuweb.debtmanagment.exception.BadRequestException;
 
 import javax.validation.Valid;
@@ -12,7 +13,7 @@ import java.util.List;
 import static pl.krzychuuweb.debtmanagment.debtor.dto.DebtorDTO.mapDebtorListToDebtorDTO;
 import static pl.krzychuuweb.debtmanagment.debtor.dto.DebtorDTO.mapDebtorToDebtorDTO;
 import static pl.krzychuuweb.debtmanagment.debtor.dto.DebtorMapper.mapDebtorCreateDTOToDebtor;
-import static pl.krzychuuweb.debtmanagment.debtor.dto.DebtorMapper.mapDebtorDTOToDebtor;
+import static pl.krzychuuweb.debtmanagment.debtor.dto.DebtorMapper.mapDebtorEditDTOToDebtor;
 
 @RestController
 @RequestMapping("/debtors")
@@ -47,14 +48,14 @@ class DebtorController {
     }
 
     @PutMapping("/{id}")
-    DebtorDTO editDebtor(@PathVariable Long id, @Valid @RequestBody DebtorDTO debtorDTO) {
-        if (!id.equals(debtorDTO.id())) {
+    DebtorDTO editDebtor(@PathVariable Long id, @Valid @RequestBody DebtorEditDTO debtorEditDTO) {
+        if (!id.equals(debtorEditDTO.id())) {
             throw new BadRequestException("Id in path is not equals in body");
         }
 
         return mapDebtorToDebtorDTO(
                 debtorFacade.editDebtor(
-                        mapDebtorDTOToDebtor(debtorDTO)
+                        mapDebtorEditDTOToDebtor(debtorEditDTO)
                 )
         );
     }
