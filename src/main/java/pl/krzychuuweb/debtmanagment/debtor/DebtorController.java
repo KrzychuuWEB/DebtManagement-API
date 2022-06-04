@@ -6,6 +6,7 @@ import pl.krzychuuweb.debtmanagment.debtor.dto.DebtorCreateDTO;
 import pl.krzychuuweb.debtmanagment.debtor.dto.DebtorDTO;
 import pl.krzychuuweb.debtmanagment.exception.BadRequestException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static pl.krzychuuweb.debtmanagment.debtor.dto.DebtorDTO.mapDebtorListToDebtorDTO;
@@ -37,7 +38,7 @@ class DebtorController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    DebtorDTO createDebtor(@RequestBody DebtorCreateDTO debtorCreateDTO) {
+    DebtorDTO createDebtor(@Valid @RequestBody DebtorCreateDTO debtorCreateDTO) {
         return mapDebtorToDebtorDTO(
                 debtorFacade.addDebtor(
                         mapDebtorCreateDTOToDebtor(debtorCreateDTO)
@@ -46,7 +47,7 @@ class DebtorController {
     }
 
     @PutMapping("/{id}")
-    DebtorDTO editDebtor(@PathVariable Long id, @RequestBody DebtorDTO debtorDTO) {
+    DebtorDTO editDebtor(@PathVariable Long id, @Valid @RequestBody DebtorDTO debtorDTO) {
         if (!id.equals(debtorDTO.id())) {
             throw new BadRequestException("Id in path is not equals in body");
         }

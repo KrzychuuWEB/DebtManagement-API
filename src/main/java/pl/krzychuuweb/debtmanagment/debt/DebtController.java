@@ -8,6 +8,7 @@ import pl.krzychuuweb.debtmanagment.debt.dto.DebtDevotedDTO;
 import pl.krzychuuweb.debtmanagment.debt.dto.DebtEditDTO;
 import pl.krzychuuweb.debtmanagment.exception.BadRequestException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static pl.krzychuuweb.debtmanagment.debt.dto.DebtDTO.mapDebtListToDebtDTOList;
@@ -38,14 +39,14 @@ class DebtController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    DebtDTO createDebt(@RequestBody DebtCreateDTO debtCreateDTO) {
+    DebtDTO createDebt(@Valid @RequestBody DebtCreateDTO debtCreateDTO) {
         return mapDebtToDebtDTO(
                 debtFacade.addDebt(mapDebtCreateDTOToDebt(debtCreateDTO), debtCreateDTO.debtorId())
         );
     }
 
     @PutMapping("/{id}")
-    DebtDTO editDebt(@PathVariable Long id, @RequestBody DebtEditDTO debtEditDTO) {
+    DebtDTO editDebt(@PathVariable Long id, @Valid @RequestBody DebtEditDTO debtEditDTO) {
         if (!id.equals(debtEditDTO.id())) {
             throw new BadRequestException("Id in path is not equals in body");
         }
@@ -63,7 +64,7 @@ class DebtController {
     }
 
     @PutMapping("/{id}/devoted")
-    DebtDevotedDTO changeDebtDevoted(@PathVariable Long id, @RequestBody DebtDevotedDTO debtDevotedDTO) {
+    DebtDevotedDTO changeDebtDevoted(@PathVariable Long id, @Valid @RequestBody DebtDevotedDTO debtDevotedDTO) {
         if (!id.equals(debtDevotedDTO.id())) {
             throw new BadRequestException("Id in path is not equals in body");
         }
