@@ -1,11 +1,11 @@
 package pl.krzychuuweb.debtmanagment.debtor;
 
-class TestDebtorBuilder {
+public class TestDebtorBuilder {
 
     public static String DEFAULT_FIRSTNAME = "ExampleFirstName";
 
     private Long id = 1L;
-    private String firstName = DEFAULT_FIRSTNAME;
+    private String firstName = "ExampleFirstName";
     private String lastName = "ExampleLastName";
     private boolean isEnabled = true;
 
@@ -13,7 +13,7 @@ class TestDebtorBuilder {
         return new TestDebtorBuilder();
     }
 
-    TestDebtorBuilder withId(Long id) {
+    public TestDebtorBuilder withId(Long id) {
         this.id = id;
         return this;
     }
@@ -33,7 +33,7 @@ class TestDebtorBuilder {
         return this;
     }
 
-    TestDebtorBuilder but() {
+    public TestDebtorBuilder but() {
         return TestDebtorBuilder
                 .newDebtor()
                 .withId(id)
@@ -42,7 +42,7 @@ class TestDebtorBuilder {
                 .withIsEnabled(isEnabled);
     }
 
-    Debtor build() {
+    public Debtor build() {
         Debtor debtor = new Debtor();
         debtor.setId(id);
         debtor.setFirstName(firstName);

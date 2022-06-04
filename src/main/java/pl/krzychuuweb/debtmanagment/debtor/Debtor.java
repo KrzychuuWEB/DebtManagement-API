@@ -1,9 +1,7 @@
 package pl.krzychuuweb.debtmanagment.debtor;
 
-import pl.krzychuuweb.debtmanagment.debt.Debt;
-
 import javax.persistence.*;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "debtors")
@@ -14,7 +12,8 @@ public class Debtor {
     private Long id;
     private String firstName;
     private String lastName;
-    private boolean isEnabled;
+    private boolean isEnabled = true;
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     public Long getId() {
         return id;
@@ -46,5 +45,9 @@ public class Debtor {
 
     public void setEnabled(final boolean enabled) {
         isEnabled = enabled;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }
