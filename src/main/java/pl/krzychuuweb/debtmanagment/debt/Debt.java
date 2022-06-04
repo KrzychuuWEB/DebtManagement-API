@@ -4,6 +4,7 @@ import pl.krzychuuweb.debtmanagment.debtor.Debtor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "debts")
@@ -19,6 +20,7 @@ public class Debt {
     @ManyToOne
     @JoinColumn(name = "debtor_id")
     private Debtor debtor;
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     public Long getId() {
         return id;
@@ -66,5 +68,9 @@ public class Debt {
 
     public void setDebtor(final Debtor debtor) {
         this.debtor = debtor;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }

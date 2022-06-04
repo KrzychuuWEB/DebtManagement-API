@@ -12,7 +12,7 @@ public class Debtor {
     private Long id;
     private String firstName;
     private String lastName;
-    private boolean isEnabled;
+    private boolean isEnabled = true;
     private final LocalDateTime createdAt = LocalDateTime.now();
 
     public Long getId() {
