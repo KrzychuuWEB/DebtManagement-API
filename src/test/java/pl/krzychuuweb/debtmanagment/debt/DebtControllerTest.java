@@ -157,4 +157,28 @@ class DebtControllerTest {
 
         assertThat(response.devoted()).isTrue();
     }
+
+    @Test
+    @Transactional
+    void should_get_all_debts_by_debtor_id() throws Exception {
+        Debtor debtor = debtorFacade.addDebtor(debtorFacade.addDebtor(TestDebtorBuilder.newDebtor().withId(1L).build()));
+        Debtor debtor2 = debtorFacade.addDebtor(debtorFacade.addDebtor(TestDebtorBuilder.newDebtor().but().withId(2L).build()));
+
+        List<Debt> debtList = List.of(
+                TestDebtBuilder.newDebt().but().withId(1L).withDebtor(debtor).build(),
+                TestDebtBuilder.newDebt().but().withId(2L).withDebtor(debtor).build(),
+                TestDebtBuilder.newDebt().but().withId(3L).but().withDebtor(debtor2).build()
+        );
+
+        debtRepository.saveAll(debtList);
+
+        MvcResult result = mockMvc.perform(get("/debts/debtors/" + debtor.getId()))
+                .andExpect(status().is(200))
+                .andReturn();
+
+        List<DebtDTO> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+        });
+
+        assertThat(response).hasSize(2);
+    }
 }

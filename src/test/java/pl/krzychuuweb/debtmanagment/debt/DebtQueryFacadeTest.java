@@ -3,6 +3,8 @@ package pl.krzychuuweb.debtmanagment.debt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import pl.krzychuuweb.debtmanagment.debtor.Debtor;
+import pl.krzychuuweb.debtmanagment.debtor.TestDebtorBuilder;
 import pl.krzychuuweb.debtmanagment.exception.NotFoundException;
 
 import java.util.ArrayList;
@@ -56,5 +58,28 @@ class DebtQueryFacadeTest {
         List<Debt> result = debtQueryFacade.getAllDebts();
 
         assertThat(result).hasSize(2);
+    }
+
+    @Test
+    void should_get_all_debts_by_debtor_id() {
+        Debtor debtor = TestDebtorBuilder.newDebtor().withId(1L).build();
+
+        List<Debt> debtList = List.of(
+                TestDebtBuilder.newDebt().withId(1L).withDebtor(debtor).build(),
+                TestDebtBuilder.newDebt().withId(2L).withDebtor(debtor).build()
+        );
+
+        when(debtQueryRepository.findAllByDebtorId(debtor.getId())).thenReturn(debtList);
+
+        List<Debt> result = debtQueryFacade.getAllDebtsByDebtorId(debtor.getId());
+
+        assertThat(result).hasSize(2);
+    }
+
+    @Test
+    void should_get_all_debts_by_debtor_id_return_exception() {
+        when(debtQueryRepository.findAllByDebtorId(anyLong())).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> debtQueryFacade.getAllDebtsByDebtorId(anyLong()));
     }
 }

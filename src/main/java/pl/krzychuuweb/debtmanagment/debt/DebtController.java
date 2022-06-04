@@ -37,6 +37,11 @@ class DebtController {
         return mapDebtToDebtDTO(debtQueryFacade.getDebtById(id));
     }
 
+    @GetMapping("/debtors/{id}")
+    List<DebtDTO> getAllDebtsByDebtorId(@PathVariable Long id) {
+        return mapDebtListToDebtDTOList(debtQueryFacade.getAllDebtsByDebtorId(id));
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     DebtDTO createDebt(@Valid @RequestBody DebtCreateDTO debtCreateDTO) {

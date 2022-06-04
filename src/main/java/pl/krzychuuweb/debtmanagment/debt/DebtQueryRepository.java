@@ -12,4 +12,6 @@ interface DebtQueryRepository extends JpaRepository<Debt, Long> {
     Optional<Debt> findById(Long id);
 
     List<Debt> findAll();
+
+    List<Debt> findAllByDebtorId(Long id);
 }
