@@ -43,7 +43,7 @@ public class DebtFacade {
 
         return debtRepository.save(debtToEdit);
     }
-
+    @Transactional
     public void deleteDebt(Long id) {
         debtRepository.deleteDebtById(id);
     }
