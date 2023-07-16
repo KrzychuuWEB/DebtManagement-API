@@ -1,5 +1,5 @@
 # Debt Managment API
-Debt Managment CLIENT - [https://github.com/KrzychuuWEB/DebtManagement-API](https://github.com/KrzychuuWEB/DebtManagement-Client)
+Debt Managment CLIENT - [https://github.com/KrzychuuWEB/DebtManagement-Client](https://github.com/KrzychuuWEB/DebtManagement-Client)
 
 ## Table of contents
 * [Description](#description)
